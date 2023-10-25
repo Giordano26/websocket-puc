@@ -6,6 +6,16 @@ PORT = 8765
 
 #gethostname -> machine name 
 #gethostby name -> get ip by machine name 
-SERVER = socket.gethostbyname(socket.gethostname())
+HOST = socket.gethostbyname(socket.gethostname())
 
-print(SERVER)
+#tuple for host and port
+ADDR = (HOST, PORT)
+
+#Create a new socket
+#socket.AF_INET -> socket family IPV4
+#socket.SOCK_STREAM -> streaming data on the socket
+server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+#anything that hits the address -> addr(HOST + PORT), will be on this socket
+server.bind(ADDR)
+
