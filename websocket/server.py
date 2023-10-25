@@ -11,6 +11,9 @@ HOST = socket.gethostbyname(socket.gethostname())
 #tuple for host and port
 ADDR = (HOST, PORT)
 
+#header(first 64 bytes) from requisition -> will tell the size of the msg for sockek recv
+HEADER = 64
+
 #Create a new socket
 #socket.AF_INET -> socket family IPV4
 #socket.SOCK_STREAM -> streaming data on the socket
@@ -32,11 +35,15 @@ def start():
         thread.start()
 
         #shows actual connections
-        print(f"[NEW CONECCTION] New connection from {conn}/{addr}")
         print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
 
 def client_handle(conn, addr):
-    pass
+    print(f"[NEW CONNECTION] {addr} connected.")
+
+    connected = True
+
+    while connected:
+        msg = conn.recv()
 
 
 
