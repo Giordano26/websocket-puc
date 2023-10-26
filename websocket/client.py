@@ -27,3 +27,25 @@ client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 #connect client to the socket on (HOST, PORT)
 client.connect(ADDR)
+
+
+def send(msg):
+    #when sending messages, its crucial to enconde them to bytes objects
+    #then send them to socket
+    message = msg.encode(FORMAT)
+
+    #we need to format and pad the 64 bytes header for the message length
+    #so the server can handle properly the size of the message we are sending
+    msg_length = len (message)
+    send_length = str(msg_length).encode(FORMAT)
+
+    #calculation for the padd -> byte size of space * (64 bytes header - len of the msg)
+    #making sure that the first 64 bytes are just the header
+    send_length += b' ' * (HEADER - len(send_length))
+
+    #send first the header then the actual message
+    client.send(send_length)
+    client.send(message)
+
+
+send("Hi, sending my message to server")
