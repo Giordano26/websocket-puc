@@ -28,6 +28,15 @@ server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 #anything that hits the address -> addr(HOST + PORT), will be on this socket
 server.bind(ADDR)
+user_dict = {}
+
+
+def set_username(conn,addr):
+    msg_lenght = int(conn.recv(HEADER).decode(FORMAT))
+        
+    username = conn.recv(msg_lenght).decode(FORMAT)
+
+    user_dict[addr] = username
 
 def start():
     server.listen()
@@ -47,6 +56,7 @@ def start():
 def client_handle(conn, addr):
     print(f"[NEW CONNECTION]: {addr} connected.")
 
+    set_username(conn,addr)
     connected = True
 
     while connected:
@@ -63,7 +73,7 @@ def client_handle(conn, addr):
             msg = conn.recv(msg_lenght).decode(FORMAT)
 
             if msg != DISCONNECT_MESSAGE:
-                print(f"[{addr}]: {msg}")
+                print(f"[{user_dict[addr]}]: {msg}")
             else:
                 print(f"[DISCONNECTING]: client {addr} is disconnecting...")
                 connected = False
