@@ -5,7 +5,7 @@ import socket
 PORT = 8765
 
 #get the host from the server start
-HOST = "192.168.15.114"
+HOST = "127.0.1.1"
 
 #tuple for host and port
 ADDR = (HOST, PORT)
@@ -47,5 +47,17 @@ def send(msg):
     client.send(send_length)
     client.send(message)
 
+def start():
+    username = input("Who are you?: ")
+    send(username)
+    connected = True
 
-send("Hi, sending my message to server")
+    while connected:
+        client_msg = input("> ")
+        send(client_msg)
+        if client_msg == DISCONNECT_MESSAGE:
+            print("Now Disconnecting...")
+            connected = False
+            
+start()
+exit()
