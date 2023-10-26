@@ -50,17 +50,23 @@ def client_handle(conn, addr):
     connected = True
 
     while connected:
-        #parsing the header to integer to grab the size of char stream from client message
-        msg_lenght = int(conn.recv(HEADER).decode(FORMAT))
+        #grab any message sent from client
+        msg_lenght = conn.recv(HEADER).decode(FORMAT)
         
-        #actual message from client before parsing the header
-        msg = conn.recv(msg_lenght).decode(FORMAT)
+        #the first connection won't generate a real msg, thus we need to verify when a msg is being sent
+        #simply see if there is any msg lenght
+        if msg_lenght:
+            #parsing the header to integer to grab the size of char stream from client message
+            msg_lenght = int(msg_lenght)
+        
+            #actual message from client before parsing the header
+            msg = conn.recv(msg_lenght).decode(FORMAT)
 
-        if msg != DISCONNECT_MESSAGE:
-            print(f"[{addr}]: {msg}")
-        else:
-            print(f"[DISCONNECTING]: client {addr} is disconnecting...")
-            connected = False
+            if msg != DISCONNECT_MESSAGE:
+                print(f"[{addr}]: {msg}")
+            else:
+                print(f"[DISCONNECTING]: client {addr} is disconnecting...")
+                connected = False
 
     conn.close()
 
